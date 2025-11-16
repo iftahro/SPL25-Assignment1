@@ -11,9 +11,12 @@ WAVTrack::WAVTrack(const std::string& title, const std::vector<std::string>& art
 // ========== TODO: STUDENTS IMPLEMENT THESE VIRTUAL FUNCTIONS ==========
 
 void WAVTrack::load() {
-    // TODO: Implement realistic WAV loading simulation
+    std::cout << "[WAVTrack::load] Loading WAV: \"" << title
+              << "\" at " << sample_rate << "Hz/" << bit_depth << "bit (uncompressed)...\n";
+    long size = duration_seconds * sample_rate * (bit_depth / 8) * 2;
+    std::cout << "  → Estimated file size: " << size << " bytes\n";
+    std::cout << "  → Fast loading due to uncompressed format.";
     // NOTE: Use exactly 2 spaces before the arrow (→) character
-
 }
 
 void WAVTrack::analyze_beatgrid() {

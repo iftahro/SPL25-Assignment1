@@ -15,16 +15,21 @@ MP3Track::MP3Track(const std::string& title, const std::vector<std::string>& art
 void MP3Track::load() {
     std::cout << "[MP3Track::load] Loading MP3: \"" << title
               << "\" at " << bitrate << " kbps...\n";
-    // TODO: Implement MP3 loading with format-specific operations
+    std::cout << (has_id3_tags ? "  → Processing ID3 metadata (artist info, album art, etc.)..." : 
+    "  → No ID3 tags found.") << std::endl;
+    std::cout << "  → Decoding MP3 frames..." << std::endl;
+    std::cout << "  → Load complete." << std::endl;
     // NOTE: Use exactly 2 spaces before the arrow (→) character
     
 }
 
 void MP3Track::analyze_beatgrid() {
-     std::cout << "[MP3Track::analyze_beatgrid] Analyzing beat grid for: \"" << title << "\"\n";
-    // TODO: Implement MP3-specific beat detection analysis
+    std::cout << "[MP3Track::analyze_beatgrid] Analyzing beat grid for: \"" << title << "\"\n";
+    double beats_estimated = (duration_seconds / 60.0) * bpm;
+    double precision_factor = bitrate / 320.0;
+    std::cout << "  → Estimated beats: \"" << beats_estimated 
+    << "\"  → Compression precision factor: \"" << precision_factor << "\"" << std::endl;
     // NOTE: Use exactly 2 spaces before each arrow (→) character
-
 }
 
 double MP3Track::get_quality_score() const {
