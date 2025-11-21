@@ -69,7 +69,7 @@ AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
     }
     return *this;
 }
-
+// todo - remove std::move?
 AudioTrack::AudioTrack(AudioTrack&& other) noexcept
 : title(std::move(other.title)), artists(std::move(other.artists)), duration_seconds(other.duration_seconds), bpm(other.bpm), 
       waveform_data(other.waveform_data), waveform_size(other.waveform_size) {
@@ -88,6 +88,7 @@ AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept
     if (this == &other) {
         return *this;
     }
+    // todo - remove std::move?
     title = std::move(other.title);
     artists = std::move(other.artists);
     duration_seconds = other.duration_seconds;
