@@ -9,7 +9,16 @@
 
 
 DJSession::DJSession(const std::string& name, bool play_all)
-    : session_name(name), play_all(play_all) {
+    : session_name(name),
+    library_service(),
+    controller_service(),
+    mixing_service(),
+    config_manager(),
+    session_config(),
+    track_titles(),
+    play_all(play_all),
+    stats()
+    {
     std::cout << "DJ Session System initialized: " << session_name << std::endl;
 }
 
@@ -41,7 +50,6 @@ bool DJSession::load_playlist(const std::string& playlist_name)  {
 }
 
 /**
- * TODO: Implement load_track_to_controller method
  * 
  * REQUIREMENTS:
  * 1. Track Retrieval
@@ -63,20 +71,52 @@ bool DJSession::load_playlist(const std::string& playlist_name)  {
 
  */
 int DJSession::load_track_to_controller(const std::string& track_name) {
-    // Your implementation here
-    return 0; // Placeholder
+    AudioTrack* ptr_track = library_service.findTrack(track_name);
+    if(ptr_track == nullptr) {
+        std::cerr << "[ERROR] Track: \""<<track_name<<"\" not found in library"<<std::endl;
+        stats.errors++;
+        return 0;
+    }
+    std::cout << "[System] Loading track '"<<track_name<<"' to controller..."<<std::endl;
+    int result = controller_service.loadTrackToCache(*ptr_track);
+    controller_service.displayCacheStatus(); // Lotem update 16.11
+    if(result==1){
+        stats.cache_hits++;
+    } else if (result==0){
+        stats.cache_misses++;
+    }else{
+        stats.cache_misses++;
+        stats.cache_evictions++;
+    }
+    return result; 
 }
 
 /**
- * TODO: Implement load_track_to_mixer_deck method
  * 
  * @param track_title: Title of track to load to mixer
  * @return: Whether track was successfully loaded to a deck
  */
 bool DJSession::load_track_to_mixer_deck(const std::string& track_title) {
     std::cout << "[System] Delegating track transfer to MixingEngineService for: " << track_title << std::endl;
-    // your implementation here
-    return false; // Placeholder
+    AudioTrack* ptr_track = controller_service.getTrackFromCache(track_title);
+    if(ptr_track == nullptr) {
+        std::cerr << "[ERROR] Track: \""<<track_title<<"\" not found in cache"<<std::endl;
+        stats.errors++;
+        return false;
+    }
+    int result = mixing_service.loadTrackToDeck(*ptr_track);
+    mixing_service.displayDeckStatus(); // Lotem update 16.11
+    if(result==1){
+        stats.deck_loads_b++;
+        stats.transitions++;
+    } else if (result==0){
+        stats.deck_loads_a++;
+        stats.transitions++;
+    }else{
+        stats.errors++;
+        return false;
+    }
+    return true; 
 }
 
 /**
@@ -107,8 +147,48 @@ void DJSession::simulate_dj_performance() {
     std::cout << "Cache Capacity: " << session_config.controller_cache_size << " slots (LRU policy)" << std::endl;
     std::cout << "\n--- Processing Tracks ---" << std::endl;
 
-    std::cout << "TODO: Implement the DJ performance simulation workflow here." << std::endl;
-    // Your implementation here
+    if (play_all)
+    {
+        for(const auto& pair : session_config.playlists){
+            bool result = load_playlist(pair.first);
+            if (!result)
+            {
+                std::cerr << "[ERROR] Failed do load playlist \"" <<pair.first<<"\"" << std::endl;
+                continue;
+            }
+            for(AudioTrack* track_ptr : library_service.getPlaylist().getTracks()){
+                std::cout << "\n--- Processing: "<<track_ptr->get_title()<<" ---" << std::endl; 
+                stats.tracks_processed++;
+                load_track_to_controller(track_ptr->get_title());
+                load_track_to_mixer_deck(track_ptr->get_title());
+            }
+            print_session_summary();
+        }
+    }
+    else{
+        while (true)
+        {
+            std::string ans = display_playlist_menu_from_config();
+            if (ans == "")
+            {
+                break;
+            }
+            bool result = load_playlist(ans);
+            if (!result)
+            {
+                std::cerr << "[ERROR] Failed do load playlist \"" <<ans<<"\"" << std::endl;
+                continue;
+            }
+            for(AudioTrack* track_ptr : library_service.getPlaylist().getTracks()){
+                std::cout << "\n--- Processing: "<<track_ptr->get_title()<<" ---" << std::endl; 
+                stats.tracks_processed++;
+                load_track_to_controller(track_ptr->get_title());
+                load_track_to_mixer_deck(track_ptr->get_title());
+            }
+            print_session_summary();
+        }
+    }
+    std::cout <<"Session cancelled by user or all playlists played."<<std::endl;
 }
 
 

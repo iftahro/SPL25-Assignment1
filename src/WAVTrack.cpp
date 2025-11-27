@@ -8,7 +8,7 @@ WAVTrack::WAVTrack(const std::string& title, const std::vector<std::string>& art
     std::cout << "WAVTrack created: " << sample_rate << "Hz/" << bit_depth << "bit" << std::endl;
 }
 
-// ========== TODO: STUDENTS IMPLEMENT THESE VIRTUAL FUNCTIONS ==========
+// ========== STUDENTS IMPLEMENT THESE VIRTUAL FUNCTIONS ==========
 
 void WAVTrack::load() {
     std::cout << "[WAVTrack::load] Loading WAV: \"" << title << "\" at " <<
@@ -21,7 +21,7 @@ void WAVTrack::load() {
 void WAVTrack::analyze_beatgrid() {
     std::cout << "[WAVTrack::analyze_beatgrid] Analyzing beat grid for: \"" << title << "\"" << std::endl;
     double beats = (duration_seconds / 60.0) * bpm;
-    std::cout << "  → Estimated beats: " << beats << "  → Precision factor: 1 (uncompressed audio)" << std::endl;
+    std::cout << "  → Estimated beats: " << (int)beats << "  → Precision factor: 1 (uncompressed audio)" << std::endl;
 }
 
 double WAVTrack::get_quality_score() const {

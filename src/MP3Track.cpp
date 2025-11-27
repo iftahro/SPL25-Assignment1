@@ -10,7 +10,7 @@ MP3Track::MP3Track(const std::string& title, const std::vector<std::string>& art
     std::cout << "MP3Track created: " << bitrate << " kbps" << std::endl;
 }
 
-// ========== TODO: STUDENTS IMPLEMENT THESE VIRTUAL FUNCTIONS ==========
+// ========== STUDENTS IMPLEMENT THESE VIRTUAL FUNCTIONS ==========
 
 void MP3Track::load() {
     std::cout << "[MP3Track::load] Loading MP3: \"" << title << "\" at " << bitrate << " kbps...\n";
@@ -24,7 +24,7 @@ void MP3Track::analyze_beatgrid() {
     std::cout << "[MP3Track::analyze_beatgrid] Analyzing beat grid for: \"" << title << "\"" << std::endl;
     double beats_estimated = (duration_seconds / 60.0) * bpm;
     double precision_factor = bitrate / 320.0;
-    std::cout << "  → Estimated beats: " << beats_estimated << "  → Compression precision factor: " << precision_factor << std::endl;
+    std::cout << "  → Estimated beats: " << (int)beats_estimated << "  → Compression precision factor: " << precision_factor << std::endl;
 }
 
 double MP3Track::get_quality_score() const {

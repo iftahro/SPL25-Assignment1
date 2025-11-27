@@ -6,19 +6,59 @@ Playlist::Playlist(const std::string& name)
     : head(nullptr), playlist_name(name), track_count(0) {
     std::cout << "Created playlist: " << name << std::endl;
 }
-// TODO: Fix memory leaks!
+
 // Students must fix this in Phase 1
 Playlist::~Playlist() {
     #ifdef DEBUG
     std::cout << "Destroying playlist: " << playlist_name << std::endl;
     #endif
-    PlaylistNode* current = head;
-    
-    while (current) {
-        PlaylistNode* prev = current;
-        current = current->next;
-        delete prev;
+    clear();
+}
+
+Playlist::Playlist(const Playlist& other) : head(nullptr), playlist_name(other.playlist_name), 
+ track_count(other.track_count)  {
+    if (other.head == nullptr) return;
+
+    head = new PlaylistNode(other.head->track->clone().release());
+    PlaylistNode* curr = head;
+    PlaylistNode* src = other.head->next;
+
+    while (src != nullptr) {
+        curr->next = new PlaylistNode(src->track->clone().release());
+        curr = curr->next;
+        src  = src->next;
     }
+}
+
+Playlist& Playlist::operator=(const Playlist& other) {
+    if (this == &other)
+        return *this;
+    clear();
+    playlist_name = other.playlist_name;
+    track_count = other.track_count;
+    head = nullptr;
+    if (other.head == nullptr) return *this;
+    head = new PlaylistNode(other.head->track->clone().release());
+    PlaylistNode* curr = head;
+    PlaylistNode* src = other.head->next;
+
+    while (src != nullptr) {
+        curr->next = new PlaylistNode(src->track->clone().release());
+        curr = curr->next;
+        src  = src->next;
+    }
+    return *this;
+}
+
+void Playlist::clear() {
+    PlaylistNode* current = head;
+    while (current != nullptr) {
+        PlaylistNode* temp = current;
+        current = current->next;
+        delete temp->track;
+        delete temp;
+    }
+    track_count = 0;
 }
 
 void Playlist::add_track(AudioTrack* track) {

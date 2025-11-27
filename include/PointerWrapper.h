@@ -32,7 +32,6 @@ public:
     explicit PointerWrapper(T* p) : ptr(p) {}
 
     /**
-     * TODO: Implement destructor
      * HINT: What should happen to the wrapped pointer when the wrapper is destroyed?
      * Think about ownership and resource management.
      * Is the default destructor sufficient here?
@@ -56,7 +55,6 @@ public:
     // ========== MOVE OPERATIONS (STUDENTS IMPLEMENT) ==========
 
     /**
-     * TODO: Implement move constructor
      * HINT: How should ownership transfer from one wrapper to another?
      * What should happen to the source wrapper after the move?
      */
@@ -65,7 +63,6 @@ public:
     }
 
     /**
-     * TODO: Implement move assignment operator
      * HINT: Handle cleanup of current resource and ownership transfer
      * Don't forget about self-assignment!
      */
@@ -82,7 +79,6 @@ public:
     // ========== ACCESS OPERATIONS ==========
 
     /**
-     * TODO: Implement dereference operator
      * HINT: How do you access the object that the wrapper points to? Is this operation implementation complete?
      * @throws std::runtime_error if ptr is null
      */
@@ -93,7 +89,6 @@ public:
     };
 
     /**
-     * TODO: Implement arrow operator
      * HINT: How do you access members of the wrapped object?
      * What safety checks should you perform?
      */
@@ -102,7 +97,6 @@ public:
     }
 
     /**
-     * TODO: Implement get() function
      * HINT: Sometimes you need access to the raw pointer without changing ownership
      * What should this function return?
      * @throws std::runtime_error if ptr is null
@@ -115,7 +109,6 @@ public:
     // ========== OWNERSHIP MANAGEMENT ==========
 
     /**
-     * TODO: Implement release() function
      * HINT: What does "release" mean in terms of ownership?
      * Should the wrapper still own the pointer after calling release()?
      */
@@ -126,7 +119,6 @@ public:
     }
 
     /**
-     * TODO: Implement reset() function
      * HINT: How do you replace the currently wrapped pointer?
      * What should happen to the old pointer?
      */
@@ -138,7 +130,6 @@ public:
     // ========== UTILITY FUNCTIONS ==========
 
     /**
-     * TODO: Implement boolean conversion operator
      * HINT: When should a wrapper be considered "true" or "false"?
      * Why might the explicit keyword be important here?
      */
@@ -168,13 +159,11 @@ PointerWrapper<T> make_pointer_wrapper(Args&&... args) {
 }
 
 /**
- * TODO: Implement swap for PointerWrapper
  * HINT: How can you swap two wrapper objects?
  * Why might this be useful?
  */
 template<typename T>
 void swap(PointerWrapper<T>& lhs, PointerWrapper<T>& rhs) noexcept {
-    // TODO: Implement global swap function
     // HINT: You can use the member swap function
     lhs.swap(rhs);
 }
