@@ -11,10 +11,39 @@ MixingEngineService::MixingEngineService(): decks(), active_deck(1), auto_sync(f
 
 MixingEngineService::~MixingEngineService() {
     std::cout << "[MixingEngineService] Cleaning up decks..." << std::endl;
-    for (size_t i = 0; i < 2; ++i) {
+    for (size_t i = 0; i < 2; i++) {
         delete decks[i];
         decks[i] = nullptr;
     }
+}
+
+MixingEngineService::MixingEngineService(const MixingEngineService& other): decks(),
+    active_deck(other.active_deck), auto_sync(other.auto_sync), bpm_tolerance(other.bpm_tolerance) 
+{
+    for (size_t i = 0; i < 2; i++) {
+        if (other.decks[i] != nullptr) {
+            decks[i] = other.decks[i]->clone().release();
+        } else {
+            decks[i] = nullptr;
+        }
+    }
+}
+
+MixingEngineService& MixingEngineService::operator=(const MixingEngineService& other) {
+    if (this == &other) return *this;
+    for (size_t i = 0; i < 2; i++) {
+        delete decks[i];
+        decks[i] = nullptr;
+    }
+    active_deck = other.active_deck;
+    auto_sync = other.auto_sync;
+    bpm_tolerance = other.bpm_tolerance;
+    for (size_t i = 0; i < 2; i++) {
+        if (other.decks[i] != nullptr) {
+            decks[i] = other.decks[i]->clone().release();
+        }
+    }
+    return *this;
 }
 
 /**
@@ -43,8 +72,7 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     AudioTrack* track_ptr = clone.release();
     decks[target] = track_ptr;
     std::string new_title = track_ptr->get_title();
-    std::cout << "[Load Complete] \"" << new_title <<
-        "\" is now loaded on deck " << target << std::endl;
+    std::cout << "[Load Complete] '" << new_title << "' is now loaded on deck " << target << std::endl;
 
     if (decks[active_deck] != nullptr) {
         std::cout << "[Unload] Unloading previous deck " << active_deck <<
@@ -85,7 +113,7 @@ bool MixingEngineService::can_mix_tracks(const PointerWrapper<AudioTrack>& track
     int active_bpm = decks[active_deck]->get_bpm();
     int new_bpm = track->get_bpm();
     int diff = std::abs(active_bpm - new_bpm); 
-    return diff <= bpm_tolerance;
+    return diff < bpm_tolerance;
 }
 
 /**
