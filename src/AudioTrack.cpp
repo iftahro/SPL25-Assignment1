@@ -28,7 +28,7 @@ AudioTrack::AudioTrack(const std::string& title, const std::vector<std::string>&
     #endif
 }
 
-// ========== TODO: STUDENTS IMPLEMENT RULE OF 5 ==========
+// ========== STUDENTS IMPLEMENT RULE OF 5 ==========
 
 AudioTrack::~AudioTrack() {
     #ifdef DEBUG
@@ -69,15 +69,14 @@ AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
     }
     return *this;
 }
-// todo - remove std::move?
+
 AudioTrack::AudioTrack(AudioTrack&& other) noexcept
-: title(std::move(other.title)), artists(std::move(other.artists)), duration_seconds(other.duration_seconds), bpm(other.bpm), 
+: title(other.title), artists(other.artists), duration_seconds(other.duration_seconds), bpm(other.bpm), 
       waveform_data(other.waveform_data), waveform_size(other.waveform_size) {
     #ifdef DEBUG
     std::cout << "AudioTrack move constructor called for: " << other.title << std::endl;
     #endif
     other.waveform_data = nullptr;
-    other.waveform_size = 0;
 }
 
 AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept 
@@ -88,18 +87,15 @@ AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept
     if (this == &other) {
         return *this;
     }
-    // todo - remove std::move?
-    title = std::move(other.title);
-    artists = std::move(other.artists);
+    title = other.title;
+    artists = other.artists;
     duration_seconds = other.duration_seconds;
     bpm = other.bpm;
+    waveform_size = other.waveform_size;
 
     delete[] waveform_data;
     waveform_data = other.waveform_data;
-    waveform_size = other.waveform_size;
-
     other.waveform_data = nullptr;
-    other.waveform_size = 0;
     return *this;
 }
 
