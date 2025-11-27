@@ -77,7 +77,7 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
         stats.errors++;
         return 0;
     }
-    std::cout << "[System] Loading track \""<<track_name<<"\" to controller..."<<std::endl;
+    std::cout << "[System] Loading track '"<<track_name<<"' to controller..."<<std::endl;
     int result = controller_service.loadTrackToCache(*ptr_track);
     controller_service.displayCacheStatus(); // Lotem update 16.11
     if(result==1){
@@ -147,7 +147,6 @@ void DJSession::simulate_dj_performance() {
     std::cout << "Cache Capacity: " << session_config.controller_cache_size << " slots (LRU policy)" << std::endl;
     std::cout << "\n--- Processing Tracks ---" << std::endl;
 
-    std::cout << "TODO: Implement the DJ performance simulation workflow here." << std::endl;
     if (play_all)
     {
         for(const auto& pair : session_config.playlists){
@@ -158,7 +157,7 @@ void DJSession::simulate_dj_performance() {
                 continue;
             }
             for(AudioTrack* track_ptr : library_service.getPlaylist().getTracks()){
-                std::cout << "\n-- Processing: \""<<track_ptr->get_title()<<"\" --" ; 
+                std::cout << "\n--- Processing: "<<track_ptr->get_title()<<" ---" << std::endl; 
                 stats.tracks_processed++;
                 load_track_to_controller(track_ptr->get_title());
                 load_track_to_mixer_deck(track_ptr->get_title());
@@ -181,7 +180,7 @@ void DJSession::simulate_dj_performance() {
                 continue;
             }
             for(AudioTrack* track_ptr : library_service.getPlaylist().getTracks()){
-                std::cout << "\n-- Processing: \""<<track_ptr->get_title()<<"\" --" ; 
+                std::cout << "\n--- Processing: "<<track_ptr->get_title()<<" ---" << std::endl; 
                 stats.tracks_processed++;
                 load_track_to_controller(track_ptr->get_title());
                 load_track_to_mixer_deck(track_ptr->get_title());

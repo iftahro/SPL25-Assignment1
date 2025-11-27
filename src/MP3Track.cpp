@@ -24,7 +24,7 @@ void MP3Track::analyze_beatgrid() {
     std::cout << "[MP3Track::analyze_beatgrid] Analyzing beat grid for: \"" << title << "\"" << std::endl;
     double beats_estimated = (duration_seconds / 60.0) * bpm;
     double precision_factor = bitrate / 320.0;
-    std::cout << "  → Estimated beats: " << beats_estimated << "  → Compression precision factor: " << precision_factor << std::endl;
+    std::cout << "  → Estimated beats: " << (int)beats_estimated << "  → Compression precision factor: " << precision_factor << std::endl;
 }
 
 double MP3Track::get_quality_score() const {

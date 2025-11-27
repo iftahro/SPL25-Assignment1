@@ -33,7 +33,7 @@ void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>&
         }
         library.push_back(new_track);
     }
-    std::cout << "[INFO] Track library built: " << library.size() << " tracks loaded";
+    std::cout << "[INFO] Track library built: " << library.size() << " tracks loaded"<<std::endl;
 }
 
 /**
@@ -81,7 +81,7 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
     playlist = new_playlist;
     
     for (int index : track_indices) {
-        if (index >= library.size() + 1 || index < 1) {
+        if (index >= (int)library.size() + 1 || index < 1) {
             std::cout << "[WARNING] Invalid track index: " << index << std::endl;
             continue;
         } 
@@ -94,8 +94,6 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
         clone->load();
         clone->analyze_beatgrid();
         playlist.add_track(clone.release());
-        std::cout << "Added \"" << clone->get_title() << "\" to playlist \"" <<
-            playlist_name << "\"" << std::endl;
     }
     std::cout << "[INFO] Playlist loaded: " << playlist_name << " (" << 
         playlist.get_track_count() << " tracks)" << std::endl;

@@ -55,8 +55,8 @@ void Playlist::clear() {
     while (current != nullptr) {
         PlaylistNode* temp = current;
         current = current->next;
-        delete temp;
         delete temp->track;
+        delete temp;
     }
     track_count = 0;
 }

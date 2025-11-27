@@ -44,7 +44,7 @@ AudioTrack::AudioTrack(const AudioTrack& other)
     #ifdef DEBUG
     std::cout << "AudioTrack copy constructor called for: " << other.title << std::endl;
     #endif
-    for (int i = 0; i < waveform_size; i++) {
+    for (int i = 0; i < (int)waveform_size; i++) {
         waveform_data[i] = other.waveform_data[i];
     }
 }
@@ -64,7 +64,7 @@ AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
 
     delete[] waveform_data;
     waveform_data = new double[waveform_size];
-    for (int i = 0; i < waveform_size; i++) {
+    for (int i = 0; i < (int)waveform_size; i++) {
         waveform_data[i] = other.waveform_data[i];
     }
     return *this;
