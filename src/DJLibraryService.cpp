@@ -86,15 +86,14 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
             continue;
         } 
         AudioTrack* track = library[index-1];
-        AudioTrack* clone = track->clone().release();
-        delete track;
-        if (clone == nullptr) {
+        PointerWrapper<AudioTrack> clone = track->clone();
+        if (!clone) {
             std::cerr << "[ERROR] Track " << index-1 << " failed to clone" << std::endl;
             continue;
         }
         clone->load();
         clone->analyze_beatgrid();
-        playlist.add_track(clone);
+        playlist.add_track(clone.release());
         std::cout << "Added \"" << clone->get_title() << "\" to playlist \"" <<
             playlist_name << "\"" << std::endl;
     }
