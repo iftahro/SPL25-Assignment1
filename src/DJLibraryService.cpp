@@ -8,7 +8,7 @@
 
 
 DJLibraryService::DJLibraryService(const Playlist& playlist) 
-    : playlist(playlist) {}
+    : playlist(playlist), library() {}
 
 DJLibraryService::~DJLibraryService() {
     for (AudioTrack* track : library) {

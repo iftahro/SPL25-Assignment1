@@ -2,7 +2,7 @@
 #include <iostream>
 #include <memory>
 
-MixingEngineService::MixingEngineService(): active_deck(0), auto_sync(false), bpm_tolerance(0)
+MixingEngineService::MixingEngineService(): decks(), active_deck(1), auto_sync(false), bpm_tolerance(0)
 {
     decks[0] = nullptr;
     decks[1] = nullptr;
@@ -27,9 +27,6 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     if (!clone) {
         std::cerr << "[ERROR] Track: \"" << track.get_title() << "\" failed to clone" << std::endl;
         return -1;
-    }
-    if (decks[active_deck] == nullptr) { // First track hack.
-        active_deck = 1;
     }
     int target = 1 - active_deck;
     std::cout << "[Deck Switch] Target deck: " << target << std::endl;
