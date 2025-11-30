@@ -59,7 +59,10 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     }
     int target = 1 - active_deck;
     std::cout << "[Deck Switch] Target deck: " << target << std::endl;
-    
+    if (decks[target] != nullptr) {
+        delete decks[target];
+        decks[target] = nullptr;
+    }
     clone->load();
     clone->analyze_beatgrid();
 
@@ -74,12 +77,6 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     std::string new_title = track_ptr->get_title();
     std::cout << "[Load Complete] '" << new_title << "' is now loaded on deck " << target << std::endl;
 
-    if (decks[active_deck] != nullptr) {
-        std::cout << "[Unload] Unloading previous deck " << active_deck <<
-            " (" << decks[active_deck]->get_title() << ")" << std::endl;
-        delete decks[active_deck];
-        decks[active_deck] = nullptr;
-    }
     active_deck = target;
     std::cout << "[Active Deck] Switched to deck " << target << std::endl;
     return target;
@@ -113,7 +110,7 @@ bool MixingEngineService::can_mix_tracks(const PointerWrapper<AudioTrack>& track
     int active_bpm = decks[active_deck]->get_bpm();
     int new_bpm = track->get_bpm();
     int diff = std::abs(active_bpm - new_bpm); 
-    return diff < bpm_tolerance;
+    return diff <= bpm_tolerance;
 }
 
 /**

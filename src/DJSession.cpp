@@ -156,11 +156,11 @@ void DJSession::simulate_dj_performance() {
                 std::cerr << "[ERROR] Failed do load playlist \"" <<pair.first<<"\"" << std::endl;
                 continue;
             }
-            for(AudioTrack* track_ptr : library_service.getPlaylist().getTracks()){
-                std::cout << "\n--- Processing: "<<track_ptr->get_title()<<" ---" << std::endl; 
+            for(std::string track_title : library_service.getTrackTitles()){
+                std::cout << "\n--- Processing: "<<track_title<<" ---" << std::endl; 
                 stats.tracks_processed++;
-                load_track_to_controller(track_ptr->get_title());
-                load_track_to_mixer_deck(track_ptr->get_title());
+                load_track_to_controller(track_title);
+                load_track_to_mixer_deck(track_title);
             }
             print_session_summary();
         }
@@ -179,11 +179,11 @@ void DJSession::simulate_dj_performance() {
                 std::cerr << "[ERROR] Failed do load playlist \"" <<ans<<"\"" << std::endl;
                 continue;
             }
-            for(AudioTrack* track_ptr : library_service.getPlaylist().getTracks()){
-                std::cout << "\n--- Processing: "<<track_ptr->get_title()<<" ---" << std::endl; 
+            for(std::string track_title : library_service.getTrackTitles()){
+                std::cout << "\n--- Processing: "<<track_title<<" ---" << std::endl; 
                 stats.tracks_processed++;
-                load_track_to_controller(track_ptr->get_title());
-                load_track_to_mixer_deck(track_ptr->get_title());
+                load_track_to_controller(track_title);
+                load_track_to_mixer_deck(track_title);
             }
             print_session_summary();
         }
